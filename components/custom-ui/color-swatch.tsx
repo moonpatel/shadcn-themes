@@ -1,26 +1,32 @@
 import { Input } from "@/components/custom-ui/input";
+import React from "react";
 
-export default function ColorSwatch({
-  color,
-  onChange,
-  label,
-}: {
+interface ColorSwatchProps extends React.HTMLAttributes<HTMLDivElement> {
   color: string;
+  handleChange: (key: string, val: string) => void;
   label: string;
-  onChange: (key: string, val: string) => void;
-}) {
+}
+
+const ColorSwatch: React.FC<ColorSwatchProps> = ({
+  color,
+  handleChange,
+  label,
+  ...props
+}) => {
   return (
-    <div className="relative">
+    <div {...props}>
       <Input
         type="color"
         value={color}
-        onChange={(e) => onChange(label, e.target.value)}
-        className="w-10 h-10 p-0 size-8 shadow-lg rounded-none absolute opacity-0"
+        onChange={(e) => handleChange(label, e.target.value)}
+        className="p-0 shadow-lg size-full rounded-none absolute opacity-0"
       />
       <div
-        className="w-10 aspect-[1.3] rounded-md shadow-lg"
+        className="aspect-[1.3] shadow-lg"
         style={{ backgroundColor: color }}
       ></div>
     </div>
   );
-}
+};
+
+export default ColorSwatch;
