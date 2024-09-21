@@ -16,7 +16,7 @@ export function ConfigurationTool() {
       return;
     }
     newAppTheme[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
-    document.documentElement.style.setProperty(cssVar, newAppTheme[cssVar]);
+    // document.documentElement.style.setProperty(cssVar, newAppTheme[cssVar]);
     (document.querySelector("#preview") as HTMLElement).style.setProperty(
       cssVar,
       newAppTheme[cssVar]

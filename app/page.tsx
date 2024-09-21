@@ -9,7 +9,7 @@ export default function Component() {
       <div className="h-screen fixed">
         <ConfigurationTool />
       </div>
-      <div className="flex-1 p-10 space-y-6 ml-64 h-full preview" id="preview">
+      <div className="flex-1 p-10 space-y-6 ml-64 h-full preview bg-background" id="preview">
         <CardsDefault />
       </div>
     </div>
