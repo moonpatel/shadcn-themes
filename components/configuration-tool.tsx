@@ -1,38 +1,75 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/custom-ui/scroll-area";
-import { baseTheme } from "@/config";
 import { hexToHSL, hslToHex } from "@/lib/color";
 import ColorSwatch from "./custom-ui/color-swatch";
+import GenerateCodeButton from "./generate-code-button";
+import useThemeConfig from "@/hooks/use-theme-config";
+import { useTheme } from "next-themes";
+import ControlPanel from "./control-panel";
 
 export function ConfigurationTool() {
-  const [appTheme, setAppTheme] = useState<ColorTheme>(baseTheme);
+  const { themeConfig, setThemeConfig } = useThemeConfig();
+  const { theme, setTheme } = useTheme();
+
+  // useEffect(() => {
+  //   const themeConfigClone = structuredClone(themeConfig)
+  //   if (theme) {
+  //     if (theme === "light") {
+  //       themeConfigClone.light
+  //     }
+  //   }
+  // }, [theme]);
+  console.log(theme);
+
+  useEffect(() => {
+    console.log("USE EFFECT", theme);
+    let elem = document.querySelector("#preview") as HTMLDivElement;
+    if (theme === "light")
+      Object.entries(themeConfig.light).forEach(([key, value]) =>
+        (document.querySelector("#preview") as HTMLDivElement).style.setProperty(key, value)
+      );
+    else
+      Object.entries(themeConfig.dark).forEach(([key, value]) =>
+        elem.style.setProperty(key, value)
+      );
+  }, [theme]);
 
   function handleChange(cssVar: string, hex: string) {
-    const newAppTheme = structuredClone(appTheme);
+    const newAppTheme = structuredClone(themeConfig);
     let hexVal = hexToHSL(hex);
     if (!hexVal) {
       alert("Invalid color");
       return;
     }
-    newAppTheme[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
-    // document.documentElement.style.setProperty(cssVar, newAppTheme[cssVar]);
-    (document.querySelector("#preview") as HTMLElement).style.setProperty(
-      cssVar,
-      newAppTheme[cssVar]
-    );
-    setAppTheme(newAppTheme);
+    if (theme === "light") {
+      newAppTheme.light[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
+      (document.querySelector("#preview") as HTMLElement).style.setProperty(
+        cssVar,
+        newAppTheme.light[cssVar]
+      );
+    } else {
+      newAppTheme.dark[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
+      (document.querySelector("#preview") as HTMLElement).style.setProperty(
+        cssVar,
+        newAppTheme.dark[cssVar]
+      );
+    }
+    setThemeConfig(newAppTheme);
   }
 
   return (
-    <div className="min-w-64 h-screen bg-background border-r w-64">
-      <div className="border-b flex justify-between items-center">
-        {/* <h2 className="text-lg font-semibold">Color Picker</h2> */}
+    <div className="min-w-64 h-screen border-r w-64 flex flex-col">
+      <div className="p-4 border-b flex justify-between items-center">
+        <h2 className="text-lg font-semibold">Control panel</h2>
       </div>
-      <ScrollArea className="h-[calc(100vh-116px)]">
+      <ScrollArea className="h-full flex-1">
         <div className={`grid grid-cols-3`}>
-          {Object.entries(appTheme).map(([key, value]) => (
+          {Object.entries(
+            theme === "light" ? themeConfig.light : themeConfig.dark
+          ).map(([key, value]) => (
             <ColorSwatch
+              key={key}
               className="col-span-1 w-full relative"
               handleChange={handleChange}
               label={key}
@@ -41,6 +78,7 @@ export function ConfigurationTool() {
           ))}
         </div>
       </ScrollArea>
+      <ControlPanel />
     </div>
   );
 }
