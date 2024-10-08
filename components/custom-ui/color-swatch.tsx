@@ -1,5 +1,7 @@
+"use client";
+
 import { Input } from "@/components/custom-ui/input";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface ColorSwatchProps extends React.HTMLAttributes<HTMLDivElement> {
   color: string;
@@ -8,17 +10,27 @@ interface ColorSwatchProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ColorSwatch: React.FC<ColorSwatchProps> = ({
-  color,
+  color: initialColor,
   handleChange,
   label,
   ...props
 }) => {
+  const [color, setColor] = useState(initialColor);
+
+  useEffect(() => {
+    setColor(initialColor);
+  }, [initialColor]);
+
   return (
     <div {...props}>
       <Input
         type="color"
         value={color}
-        onChange={(e) => handleChange(label, e.target.value)}
+        onChange={(e) => {
+          const newColor = e.target.value;
+          setColor(newColor);
+          handleChange(label, newColor);
+        }}
         className="p-0 shadow-lg size-full rounded-none absolute opacity-0"
       />
       <div

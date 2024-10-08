@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/custom-ui/scroll-area";
 import { hexToHSL, hslToHex } from "@/lib/color";
 import ColorSwatch from "./custom-ui/color-swatch";
-import GenerateCodeButton from "./generate-code-button";
 import useThemeConfig from "@/hooks/use-theme-config";
 import { useTheme } from "next-themes";
 import ControlPanel from "./control-panel";
@@ -11,17 +10,19 @@ import ControlPanel from "./control-panel";
 export function ConfigurationTool() {
   const { themeConfig, setThemeConfig } = useThemeConfig();
   const { theme } = useTheme();
+  console.log(theme);
 
   useEffect(() => {
     let elem = document.querySelector("#preview") as HTMLDivElement;
-    if (theme === "light")
+    if (theme === "light" || theme === undefined) {
       Object.entries(themeConfig.light).forEach(([key, value]) =>
-        (document.querySelector("#preview") as HTMLDivElement).style.setProperty(key, value)
+        elem.style.setProperty(key, value)
       );
-    else
+    } else {
       Object.entries(themeConfig.dark).forEach(([key, value]) =>
         elem.style.setProperty(key, value)
       );
+    }
   }, [themeConfig, theme]);
 
   function handleChange(cssVar: string, hex: string) {
@@ -31,7 +32,7 @@ export function ConfigurationTool() {
       alert("Invalid color");
       return;
     }
-    if (theme === "light") {
+    if (theme === "light" || theme === undefined) {
       newAppTheme.light[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
     } else {
       newAppTheme.dark[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
@@ -47,7 +48,7 @@ export function ConfigurationTool() {
       <ScrollArea className="h-full flex-1">
         <div className={`grid grid-cols-3`}>
           {Object.entries(
-            theme === "light" ? themeConfig.light : themeConfig.dark
+            theme === "light" || theme === undefined ? themeConfig.light : themeConfig.dark
           ).map(([key, value]) => (
             <ColorSwatch
               key={key}

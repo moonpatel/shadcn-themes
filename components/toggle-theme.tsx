@@ -1,4 +1,4 @@
-// write toggle theme logic for next js
+"use client";
 
 import { useTheme } from "next-themes";
 import { Button } from "./custom-ui/button";
@@ -7,7 +7,7 @@ import { Moon, Sun } from "lucide-react";
 
 export default function ToggleTheme() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme, themes } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");

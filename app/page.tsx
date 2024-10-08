@@ -1,5 +1,3 @@
-"use client";
-
 import CardsDefault from "@/components/examples";
 import { ConfigurationTool } from "@/components/configuration-tool";
 import ToggleTheme from "@/components/toggle-theme";
