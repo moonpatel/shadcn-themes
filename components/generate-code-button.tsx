@@ -16,7 +16,7 @@ export default function GenerateCodeButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = () => {
-    navigator.clipboard.writeText(JSON.stringify(themeConfig, null, 2));
+    navigator.clipboard.writeText(generateCssCode(themeConfig));
     setIsCopied(true);
   };
 
@@ -39,6 +39,17 @@ export default function GenerateCodeButton() {
           <DialogHeader>
             <DialogTitle>Generated Code</DialogTitle>
             <DialogDescription>
+              <div className="py-4">
+                <p>
+                  Replace the existing CSS code in your project with the code
+                  below. Make sure you are using CSS variables in your shadcn
+                  configuration.
+                </p>
+                <p className="font-semibold">
+                  This configuration is only for the default CSS variables
+                  available in Shadcn.
+                </p>
+              </div>
               <div className="relative">
                 <pre className="bg-primary text-primary-foreground block p-4 rounded-lg overflow-y-scroll h-[720px]">
                   {generateCssCode(themeConfig)}

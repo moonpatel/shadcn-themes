@@ -33,7 +33,7 @@ export function ConfigurationTool() {
       Object.entries(themeConfig.dark).forEach(([key, value]) =>
         elem.style.setProperty(key, value)
       );
-  }, [theme]);
+  }, [themeConfig, theme]);
 
   function handleChange(cssVar: string, hex: string) {
     const newAppTheme = structuredClone(themeConfig);
@@ -44,16 +44,8 @@ export function ConfigurationTool() {
     }
     if (theme === "light") {
       newAppTheme.light[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
-      (document.querySelector("#preview") as HTMLElement).style.setProperty(
-        cssVar,
-        newAppTheme.light[cssVar]
-      );
     } else {
       newAppTheme.dark[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
-      (document.querySelector("#preview") as HTMLElement).style.setProperty(
-        cssVar,
-        newAppTheme.dark[cssVar]
-      );
     }
     setThemeConfig(newAppTheme);
   }

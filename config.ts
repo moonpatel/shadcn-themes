@@ -51,4 +51,5 @@ export const baseDarkTheme: { [key: string]: string } = {
   "--chart-3": "30 80% 55%",
   "--chart-4": "280 65% 60%",
   "--chart-5": "340 75% 55%",
+  // "--radius": "0.5rem",
 };
