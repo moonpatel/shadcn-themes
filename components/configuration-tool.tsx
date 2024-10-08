@@ -10,7 +10,7 @@ import ControlPanel from "./control-panel";
 
 export function ConfigurationTool() {
   const { themeConfig, setThemeConfig } = useThemeConfig();
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     let elem = document.querySelector("#preview") as HTMLDivElement;
