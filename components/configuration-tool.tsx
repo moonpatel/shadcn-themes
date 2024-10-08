@@ -12,18 +12,7 @@ export function ConfigurationTool() {
   const { themeConfig, setThemeConfig } = useThemeConfig();
   const { theme, setTheme } = useTheme();
 
-  // useEffect(() => {
-  //   const themeConfigClone = structuredClone(themeConfig)
-  //   if (theme) {
-  //     if (theme === "light") {
-  //       themeConfigClone.light
-  //     }
-  //   }
-  // }, [theme]);
-  console.log(theme);
-
   useEffect(() => {
-    console.log("USE EFFECT", theme);
     let elem = document.querySelector("#preview") as HTMLDivElement;
     if (theme === "light")
       Object.entries(themeConfig.light).forEach(([key, value]) =>
