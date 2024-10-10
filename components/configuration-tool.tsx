@@ -9,7 +9,7 @@ import ControlPanel from "./control-panel";
 import { Popover, PopoverContent } from "./custom-ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Button } from "./custom-ui/button";
-import { Cog } from "lucide-react";
+import { Cog, SlidersVertical } from "lucide-react";
 import { getColorPairs, getSingleColors } from "@/lib/utils";
 import GenerateCodeButton from "./generate-code-button";
 
@@ -55,8 +55,8 @@ export function ConfigurationTool() {
     <div className="fixed bottom-7 left-7">
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="rounded-full">
-            <Cog className="mr-2" />
+          <Button className="rounded-full bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500">
+            <SlidersVertical className="size-4 mr-2" />
             Customize
           </Button>
         </PopoverTrigger>
@@ -68,10 +68,10 @@ export function ConfigurationTool() {
             <div className="flex space-x-3 divide-x">
               <div className="grid grid-cols-3 gap-4 mb-4 justify-center text-sm">
                 <div className="col-span-1"></div>
-                <div className="font-medium text-sm text-center">
+                <div className="font-medium text-center">
                   Background
                 </div>
-                <div className="font-medium text-sm text-center">
+                <div className="font-medium text-center">
                   Foreground
                 </div>
                 {colorPairs.map((pair, index) => (
@@ -99,8 +99,11 @@ export function ConfigurationTool() {
                   </>
                 ))}
               </div>
-              <div className="grid mt-9 gap-4 mb-4 justify-center text-sm pl-4">
-                <div className="grid grid-cols-1 gap-4 gap-x-10 h-fit">
+              <div className="grid gap-4 mb-4 justify-center text-sm pl-4">
+                <div className="grid grid-cols-2 gap-4 gap-x-10 h-fit">
+                  <div className="col-span-2 font-medium text-left">
+                    Other properties
+                  </div>
                   {colorSingles.slice(0, 3).map((obj, index) => (
                     <div className="flex justify-between gap-4 pl-4">
                       <div
@@ -113,11 +116,28 @@ export function ConfigurationTool() {
                         className="w-12 aspect-[1.2] rounded-md ml-4"
                         handleChange={handleChange}
                         color={hslToHex(obj.value)}
-                        label={
-                          obj.cssVariable.concat(
-                            "--foreground"
-                          ) as ThemeProperty
-                        }
+                        label={obj.cssVariable}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 gap-4 gap-x-10 h-fit">
+                  <div className="col-span-2 font-medium text-left">
+                    Charts
+                  </div>
+                  {true ? <p className="text text-gray-500">Coming soon</p> :colorSingles.slice(3).map((obj, index) => (
+                    <div className="flex justify-between gap-4 pl-4">
+                      <div
+                        key={`label-${index}`}
+                        className="font-medium text-sm mt-2"
+                      >
+                        {obj.label}
+                      </div>
+                      <ColorSwatch
+                        className="w-12 aspect-[1.2] rounded-md ml-4"
+                        handleChange={handleChange}
+                        color={hslToHex(obj.value)}
+                        label={obj.cssVariable}
                       />
                     </div>
                   ))}

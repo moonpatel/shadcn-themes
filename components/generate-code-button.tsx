@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./custom-ui/dialog";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Sparkles } from "lucide-react";
 import generateCssCode from "@/lib/generate";
 
 export default function GenerateCodeButton() {
@@ -32,8 +32,9 @@ export default function GenerateCodeButton() {
         onClick={() => setIsOpen(true)}
         className="relative overflow-hidden group"
       >
+        <Sparkles className="size-4 mr-2 z-10" />
         <span className="relative z-10">Generate Code</span>
-        <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 group-hover:animate-flow"></div>
+        <div className="absolute inset-0 w-[100%] group-hover:animate-flow"></div>
       </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
