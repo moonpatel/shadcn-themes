@@ -1,4 +1,4 @@
-export const baseLightTheme: { [key: string]: string } = {
+export const baseLightTheme: ColorTheme = {
   "--background": "0 0% 100%",
   "--foreground": "222.2 84% 4.9%",
   "--card": "0 0% 100%",
@@ -26,7 +26,7 @@ export const baseLightTheme: { [key: string]: string } = {
   // "--radius": "0.5rem",
 };
 
-export const baseDarkTheme: { [key: string]: string } = {
+export const baseDarkTheme: ColorTheme = {
   "--background": "222.2 84% 4.9%",
   "--foreground": "210 40% 98%",
   "--card": "222.2 84% 4.9%",

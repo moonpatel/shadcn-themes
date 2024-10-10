@@ -68,12 +68,8 @@ export function ConfigurationTool() {
             <div className="flex space-x-3 divide-x">
               <div className="grid grid-cols-3 gap-4 mb-4 justify-center text-sm">
                 <div className="col-span-1"></div>
-                <div className="font-medium text-center">
-                  Background
-                </div>
-                <div className="font-medium text-center">
-                  Foreground
-                </div>
+                <div className="font-medium text-center">Background</div>
+                <div className="font-medium text-center">Foreground</div>
                 {colorPairs.map((pair, index) => (
                   <>
                     <div
@@ -105,7 +101,10 @@ export function ConfigurationTool() {
                     Other properties
                   </div>
                   {colorSingles.slice(0, 3).map((obj, index) => (
-                    <div className="flex justify-between gap-4 pl-4">
+                    <div
+                      key={obj.cssVariable}
+                      className="flex justify-between gap-4 pl-4"
+                    >
                       <div
                         key={`label-${index}`}
                         className="font-medium text-sm mt-2"
@@ -122,40 +121,38 @@ export function ConfigurationTool() {
                   ))}
                 </div>
                 <div className="grid grid-cols-2 gap-4 gap-x-10 h-fit">
-                  <div className="col-span-2 font-medium text-left">
-                    Charts
-                  </div>
-                  {true ? <p className="text text-gray-500">Coming soon</p> :colorSingles.slice(3).map((obj, index) => (
-                    <div className="flex justify-between gap-4 pl-4">
+                  <div className="col-span-2 font-medium text-left">Charts</div>
+                  {true ? (
+                    <p className="text text-gray-500">Coming soon</p>
+                  ) : (
+                    colorSingles.slice(3).map((obj, index) => (
                       <div
-                        key={`label-${index}`}
-                        className="font-medium text-sm mt-2"
+                        key={obj.cssVariable}
+                        className="flex justify-between gap-4 pl-4"
                       >
-                        {obj.label}
+                        <div
+                          key={`label-${index}`}
+                          className="font-medium text-sm mt-2"
+                        >
+                          {obj.label}
+                        </div>
+                        <ColorSwatch
+                          className="w-12 aspect-[1.2] rounded-md ml-4"
+                          handleChange={handleChange}
+                          color={hslToHex(obj.value)}
+                          label={obj.cssVariable}
+                        />
                       </div>
-                      <ColorSwatch
-                        className="w-12 aspect-[1.2] rounded-md ml-4"
-                        handleChange={handleChange}
-                        color={hslToHex(obj.value)}
-                        label={obj.cssVariable}
-                      />
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
-
-            {/* <ControlPanel /> */}
-
             <div className="flex space-x-2 justify-end mt-10">
               <Button variant="outline" className="mb-2" onClick={reset}>
                 Reset
               </Button>
               <GenerateCodeButton />
-              {/* <Button className="relative overflow-hidden group">
-                <span className="relative z-10">Generate Code</span>
-                <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 group-hover:animate-flow"></div>
-              </Button> */}
             </div>
           </div>
         </PopoverContent>
