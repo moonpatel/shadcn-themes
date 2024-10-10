@@ -6,11 +6,22 @@ import ColorSwatch from "./custom-ui/color-swatch";
 import useThemeConfig from "@/hooks/use-theme-config";
 import { useTheme } from "next-themes";
 import ControlPanel from "./control-panel";
+import { Popover, PopoverContent } from "./custom-ui/popover";
+import { PopoverTrigger } from "@radix-ui/react-popover";
+import { Button } from "./custom-ui/button";
+import { Cog } from "lucide-react";
+import { getColorPairs, getSingleColors } from "@/lib/utils";
+import GenerateCodeButton from "./generate-code-button";
 
 export function ConfigurationTool() {
-  const { themeConfig, setThemeConfig } = useThemeConfig();
+  const { themeConfig, setThemeConfig, reset } = useThemeConfig();
   const { theme } = useTheme();
-  console.log(theme);
+  const colorPairs = getColorPairs(
+    theme === "dark" ? themeConfig.dark : themeConfig.light
+  );
+  const colorSingles = getSingleColors(
+    theme === "dark" ? themeConfig.dark : themeConfig.light
+  );
 
   useEffect(() => {
     let elem = document.querySelector("#preview") as HTMLDivElement;
@@ -25,36 +36,130 @@ export function ConfigurationTool() {
     }
   }, [themeConfig, theme]);
 
-  function handleChange(cssVar: string, hex: string) {
+  function handleChange(cssVar: ThemeProperty, hex: string) {
     const newAppTheme = structuredClone(themeConfig);
     let hexVal = hexToHSL(hex);
     if (!hexVal) {
       alert("Invalid color");
       return;
     }
-    if (theme === "light" || theme === undefined) {
-      newAppTheme.light[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
-    } else {
+    if (theme === "dark") {
       newAppTheme.dark[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
+    } else {
+      newAppTheme.light[cssVar] = `${hexVal.h} ${hexVal.s}% ${hexVal.l}%`;
     }
     setThemeConfig(newAppTheme);
   }
 
   return (
-    <div className="min-w-64 h-screen border-r w-64 flex flex-col">
+    <div className="fixed bottom-7 left-7">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button className="rounded-full">
+            <Cog className="mr-2" />
+            Customize
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="light">
+          <div className="flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Customize theme</h2>
+            </div>
+            <div className="flex space-x-3 divide-x">
+              <div className="grid grid-cols-3 gap-4 mb-4 justify-center text-sm">
+                <div className="col-span-1"></div>
+                <div className="font-medium text-sm text-center">
+                  Background
+                </div>
+                <div className="font-medium text-sm text-center">
+                  Foreground
+                </div>
+                {colorPairs.map((pair, index) => (
+                  <>
+                    <div
+                      key={`label-${index}`}
+                      className="font-medium text-sm mt-2"
+                    >
+                      {pair.label}
+                    </div>
+                    <ColorSwatch
+                      className="w-12 aspect-[1.2] rounded-md self-center ml-4"
+                      handleChange={handleChange}
+                      color={hslToHex(pair.background)}
+                      label={pair.cssVariable}
+                    />
+                    <ColorSwatch
+                      className="w-12 aspect-[1.2] rounded-md ml-4"
+                      handleChange={handleChange}
+                      color={hslToHex(pair.foreground)}
+                      label={
+                        pair.cssVariable.concat("--foreground") as ThemeProperty
+                      }
+                    />
+                  </>
+                ))}
+              </div>
+              <div className="grid mt-9 gap-4 mb-4 justify-center text-sm pl-4">
+                <div className="grid grid-cols-1 gap-4 gap-x-10 h-fit">
+                  {colorSingles.slice(0, 3).map((obj, index) => (
+                    <div className="flex justify-between gap-4 pl-4">
+                      <div
+                        key={`label-${index}`}
+                        className="font-medium text-sm mt-2"
+                      >
+                        {obj.label}
+                      </div>
+                      <ColorSwatch
+                        className="w-12 aspect-[1.2] rounded-md ml-4"
+                        handleChange={handleChange}
+                        color={hslToHex(obj.value)}
+                        label={
+                          obj.cssVariable.concat(
+                            "--foreground"
+                          ) as ThemeProperty
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* <ControlPanel /> */}
+
+            <div className="flex space-x-2 justify-end mt-10">
+              <Button variant="outline" className="mb-2" onClick={reset}>
+                Reset
+              </Button>
+              <GenerateCodeButton />
+              {/* <Button className="relative overflow-hidden group">
+                <span className="relative z-10">Generate Code</span>
+                <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 group-hover:animate-flow"></div>
+              </Button> */}
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+
+  return (
+    <div className="min-w-64 h-screen border-r w-64 flex flex-col absolute">
       <div className="p-4 border-b flex justify-between items-center">
         <h2 className="text-lg font-semibold">Control panel</h2>
       </div>
       <ScrollArea className="h-full flex-1">
         <div className={`grid grid-cols-3`}>
           {Object.entries(
-            theme === "light" || theme === undefined ? themeConfig.light : themeConfig.dark
+            theme === "light" || theme === undefined
+              ? themeConfig.light
+              : themeConfig.dark
           ).map(([key, value]) => (
             <ColorSwatch
               key={key}
               className="col-span-1 w-full relative"
               handleChange={handleChange}
-              label={key}
+              label={key as ThemeProperty}
               color={hslToHex(value)}
             />
           ))}

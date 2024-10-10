@@ -30,9 +30,10 @@ export default function GenerateCodeButton() {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-center w-full h-12 rounded-lg"
+        className="relative overflow-hidden group"
       >
-        Generate Code
+        <span className="relative z-10">Generate Code</span>
+        <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 group-hover:animate-flow"></div>
       </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>

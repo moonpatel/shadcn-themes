@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 
 interface ColorSwatchProps extends React.HTMLAttributes<HTMLDivElement> {
   color: string;
-  handleChange: (key: string, val: string) => void;
-  label: string;
+  handleChange: (key: ThemeProperty, val: string) => void;
+  label: ThemeProperty;
 }
 
 const ColorSwatch: React.FC<ColorSwatchProps> = ({
@@ -25,16 +25,17 @@ const ColorSwatch: React.FC<ColorSwatchProps> = ({
     <div {...props}>
       <Input
         type="color"
+        fieldsize={"colorswatch"}
         value={color}
         onChange={(e) => {
           const newColor = e.target.value;
           setColor(newColor);
           handleChange(label, newColor);
         }}
-        className="p-0 shadow-lg size-full rounded-none absolute opacity-0"
+        className="p-0 shadow-lg rounded-md absolute opacity-0"
       />
       <div
-        className="aspect-[1.3] shadow-lg"
+        className="aspect-[1.3] shadow-lg rounded-md"
         style={{ backgroundColor: color }}
       ></div>
     </div>
