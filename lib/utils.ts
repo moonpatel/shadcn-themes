@@ -70,3 +70,19 @@ export function getSingleColors(theme: ColorTheme): ColorSingle[] {
     { label: "Chart 5", cssVariable: "--chart-5", value: theme["--chart-5"] },
   ];
 }
+
+export default function getColorPalette(
+  theme: ThemeConfig,
+  mode: "light" | "dark"
+) {
+  const props: ThemeProperty[] = [
+    "--primary",
+    "--background",
+    "--card",
+    "--foreground",
+    "--secondary",
+  ];
+  return mode === "dark"
+    ? props.map((prop) => theme.dark[prop])
+    : props.map((prop) => theme.light[prop]);
+}

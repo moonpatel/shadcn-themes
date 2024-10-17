@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ScrollArea } from "@/components/custom-ui/scroll-area";
 import { hexToHSL, hslToHex } from "@/lib/color";
 import ColorSwatch from "./custom-ui/color-swatch";
@@ -12,6 +12,8 @@ import { Button } from "./custom-ui/button";
 import { Cog, SlidersVertical } from "lucide-react";
 import { getColorPairs, getSingleColors } from "@/lib/utils";
 import GenerateCodeButton from "./generate-code-button";
+import SelectTheme from "./select-theme";
+import SaveThemeButton from "./save-theme";
 
 export function ConfigurationTool() {
   const { themeConfig, setThemeConfig, reset } = useThemeConfig();
@@ -60,7 +62,7 @@ export function ConfigurationTool() {
             Customize
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="light">
+        <PopoverContent className="light ml-7 mb-3">
           <div className="flex flex-col">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Customize theme</h2>
@@ -149,9 +151,8 @@ export function ConfigurationTool() {
               </div>
             </div>
             <div className="flex space-x-2 justify-end mt-10">
-              <Button variant="outline" className="mb-2" onClick={reset}>
-                Reset
-              </Button>
+              <SelectTheme />
+              <SaveThemeButton />
               <GenerateCodeButton />
             </div>
           </div>

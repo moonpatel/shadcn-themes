@@ -58,6 +58,10 @@ interface ThemeConfig {
   dark: ColorTheme;
 }
 
+interface SavedThemeConfig extends ThemeConfig {
+  name: string;
+}
+
 interface ColorPair {
   label: string;
   background: string;
