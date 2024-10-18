@@ -26,38 +26,24 @@ import {
 import { Input } from "./custom-ui/input";
 import { FormEvent, MouseEventHandler, useState } from "react";
 
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(3, {
-      message: "Theme name must be at least 3 characters.",
-    })
-    .max(20, { message: "Theme name must be 20 characters at maximum" }),
-});
-
-type formType = z.infer<typeof formSchema>;
-
 export default function SaveThemeButton() {
   const { themeConfig, saveTheme } = useThemeConfig();
   const [themeName, setThemeName] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const form = useForm<formType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
 
-  function onSubmit() {
+  const onSubmit: MouseEventHandler<HTMLButtonElement> = (evt: any) => {
     if (themeName.length > 20) {
+      evt.preventDefault();
       setErrorMsg("Theme name must be 20 characters at maximum");
       return;
     } else if (themeName.length < 3) {
+      evt.preventDefault();
       setErrorMsg("Theme name must be at least 3 characters.");
       return;
     }
     saveTheme({ ...themeConfig, name: themeName });
-  }
+    setThemeName("");
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -73,14 +59,28 @@ export default function SaveThemeButton() {
         <form onSubmit={(evt) => evt.preventDefault()}>
           <Input
             value={themeName}
-            onChange={(evt) => setThemeName(evt.target.value)}
+            onChange={(evt) => {
+              if (themeName.length < 3) {
+                setErrorMsg("Theme name must be at least 3 characters.");
+              } else if (themeName.length > 20) {
+                setErrorMsg("Theme name must be 20 characters at maximum");
+              } else {
+                setErrorMsg("");
+              }
+              setThemeName(evt.target.value);
+            }}
             placeholder="Enter theme name"
           />
+          <div className="text-red-600 text-sm my-2 mt-3">
+            {errorMsg !== "" && errorMsg}
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction disabled={errorMsg !== ""} onClick={onSubmit}>
+              Save
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </form>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit}>Save</AlertDialogAction>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
