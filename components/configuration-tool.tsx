@@ -25,7 +25,6 @@ export function ConfigurationTool() {
   const colorSingles = getSingleColors(
     theme === "dark" ? themeConfig.dark : themeConfig.light
   );
-  console.log(themeConfig);
 
   useEffect(() => {
     let elem = document.querySelector("#preview") as HTMLDivElement;
@@ -64,12 +63,12 @@ export function ConfigurationTool() {
             Customize
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="light ml-7 mb-3">
+        <PopoverContent className="light lg:ml-7 mb-3 w-screen lg:w-fit">
           <div className="flex flex-col">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Customize theme</h2>
             </div>
-            <div className="flex space-x-3 divide-x">
+            <div className="flex flex-col lg:flex-row space-x-3 lg:divide-x">
               <div className="grid grid-cols-3 gap-4 mb-4 justify-center text-sm">
                 <div className="col-span-1"></div>
                 <div className="font-medium text-center">Background</div>
@@ -103,7 +102,7 @@ export function ConfigurationTool() {
                   </>
                 ))}
               </div>
-              <div className="grid gap-4 mb-4 justify-center text-sm pl-4">
+              <div className="grid lg:grid-cols-1 gap-4 mb-4 justify-start lg:justify-center text-sm lg:pl-4 mt-5 lg:mt-0">
                 <div className="grid grid-cols-2 gap-4 gap-x-10 h-fit">
                   <div className="col-span-2 font-medium text-left">
                     Other properties
@@ -156,7 +155,7 @@ export function ConfigurationTool() {
                 </div>
               </div>
             </div>
-            <div className="flex space-x-3 justify-end mt-10">
+            <div className="flex flex-wrap gap-y-3 space-x-3 justify-end mt-10">
               <SelectTheme />
               <Button variant={"outline"} onClick={reset}>
                 Reset
@@ -166,12 +165,15 @@ export function ConfigurationTool() {
                 className="relative"
                 onClick={() => {
                   themeConfig.default &&
-                    toast("Cannot modify default theme", {
-                      style: {
-                        backgroundColor: "rgb(230,96,96)",
-                        color: "white",
-                      },
-                    });
+                    toast(
+                      "Cannot modify default theme. Create a new theme instead",
+                      {
+                        style: {
+                          backgroundColor: "rgb(230,96,96)",
+                          color: "white",
+                        },
+                      }
+                    );
                   saveTheme();
                 }}
               >
