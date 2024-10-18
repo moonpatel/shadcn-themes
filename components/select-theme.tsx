@@ -52,6 +52,7 @@ export default function SelectTheme() {
                     theme === "dark" ? "dark" : "light"
                   ).map((color, i) => (
                     <div
+                      key={i}
                       className={`size-5 ${i === 0 && "rounded-l-md"} ${
                         i === savedThemes.length && "rounded-r-md"
                       }`}
@@ -88,6 +89,7 @@ export default function SelectTheme() {
                           theme === "dark" ? "dark" : "light"
                         ).map((color, i) => (
                           <div
+                            key={i}
                             className={`size-5 ${i === 0 && "rounded-l-md"} ${
                               i === 4 && "rounded-r-md"
                             }`}
