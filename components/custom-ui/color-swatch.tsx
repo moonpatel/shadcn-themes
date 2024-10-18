@@ -30,6 +30,7 @@ const ColorSwatch: React.FC<ColorSwatchProps> = ({
         onChange={(e) => {
           const newColor = e.target.value;
           setColor(newColor);
+          console.log(label);
           handleChange(label, newColor);
         }}
         className="p-0 shadow-lg rounded-md absolute opacity-0"

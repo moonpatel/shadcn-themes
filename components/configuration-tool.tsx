@@ -25,6 +25,7 @@ export function ConfigurationTool() {
   const colorSingles = getSingleColors(
     theme === "dark" ? themeConfig.dark : themeConfig.light
   );
+  console.log(themeConfig);
 
   useEffect(() => {
     let elem = document.querySelector("#preview") as HTMLDivElement;
@@ -92,7 +93,11 @@ export function ConfigurationTool() {
                       handleChange={handleChange}
                       color={hslToHex(pair.foreground)}
                       label={
-                        pair.cssVariable.concat("--foreground") as ThemeProperty
+                        pair.cssVariable === "--background"
+                          ? "--foreground"
+                          : (pair.cssVariable.concat(
+                              "-foreground"
+                            ) as ThemeProperty)
                       }
                     />
                   </>

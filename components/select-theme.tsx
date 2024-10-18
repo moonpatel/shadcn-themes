@@ -11,7 +11,6 @@ import {
 } from "./custom-ui/dropdown-menu";
 import { Button } from "./custom-ui/button";
 import { useTheme } from "next-themes";
-import { Trash2 } from "lucide-react";
 import SaveThemeButton from "./add-theme";
 import { useThemeConfiguration } from "@/app/context/theme-config-provider";
 
