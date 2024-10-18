@@ -9,14 +9,14 @@ import {
   DialogTitle,
 } from "./custom-ui/dialog";
 import { Check, Copy, Sparkles } from "lucide-react";
-import generateCssCode from "@/lib/generate";
+import { useThemeConfiguration } from "@/app/context/theme-config-provider";
 
 export default function GenerateCodeButton() {
-  const { themeConfig } = useThemeConfig();
+  const { getCSSCode } = useThemeConfiguration();
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = () => {
-    navigator.clipboard.writeText(generateCssCode(themeConfig));
+    navigator.clipboard.writeText(getCSSCode());
     setIsCopied(true);
   };
 
@@ -54,7 +54,7 @@ export default function GenerateCodeButton() {
               </div>
               <div className="relative">
                 <pre className="bg-primary text-primary-foreground block p-4 rounded-lg overflow-y-scroll h-[720px]">
-                  {generateCssCode(themeConfig)}
+                  {getCSSCode()}
                 </pre>
                 <Button
                   onClick={handleCopy}

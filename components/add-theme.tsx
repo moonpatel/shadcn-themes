@@ -1,6 +1,5 @@
 "use client";
 import useThemeConfig from "@/hooks/use-theme-config";
-import { Button } from "./custom-ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,22 +11,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./custom-ui/alert-dialog";
-import { z } from "zod";
-import { Form, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./custom-ui/form";
 import { Input } from "./custom-ui/input";
-import { FormEvent, MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useState } from "react";
+import { Plus } from "lucide-react";
+import { useThemeConfiguration } from "@/app/context/theme-config-provider";
 
-export default function SaveThemeButton() {
-  const { themeConfig, saveTheme } = useThemeConfig();
+export default function AddThemeButton() {
+  const { addTheme } = useThemeConfiguration();
   const [themeName, setThemeName] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
@@ -41,13 +31,13 @@ export default function SaveThemeButton() {
       setErrorMsg("Theme name must be at least 3 characters.");
       return;
     }
-    saveTheme({ ...themeConfig, name: themeName });
+    addTheme(themeName);
     setThemeName("");
   };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Save Theme</Button>
+        <Plus className="size-5 cursor-pointer" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

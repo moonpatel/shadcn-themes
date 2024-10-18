@@ -1,88 +1,115 @@
-import useThemeConfig from "@/hooks/use-theme-config";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "./custom-ui/select";
 import getColorPalette from "@/lib/utils";
 import { hslToHex } from "@/lib/color";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./custom-ui/dropdown-menu";
 import { Button } from "./custom-ui/button";
+import { useTheme } from "next-themes";
+import { Trash2 } from "lucide-react";
+import SaveThemeButton from "./add-theme";
+import { useThemeConfiguration } from "@/app/context/theme-config-provider";
 
 export default function SelectTheme() {
-  const { savedThemes, changeTheme, themeConfig } = useThemeConfig();
-  console.log(themeConfig.name);
+  const { savedThemes, themeConfig, selectTheme, deleteTheme } =
+    useThemeConfiguration();
+  const { theme } = useTheme();
+  const customThemes = savedThemes.filter((theme) => !theme.default);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">Select theme</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Themes</DropdownMenuLabel>
+      <DropdownMenuContent className="w-72">
+        <DropdownMenuLabel className="flex justify-between">
+          Default Themes
+          <SaveThemeButton />
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup
-          value={themeConfig.name}
-          onValueChange={changeTheme}
-        >
-          {savedThemes.map((savedTheme) => (
-            <DropdownMenuRadioItem
-              key={savedTheme.name}
-              value={savedTheme.name}
-              className="justify-between"
-            >
-              <div className="truncate">{savedTheme.name}</div>
-              <div className="flex shadow-md">
-                {getColorPalette(savedTheme, "light").map((color, i) => (
-                  <div
-                    className={`size-5 ${i === 0 && "rounded-l-md"} ${
-                      i === savedThemes.length && "rounded-r-md"
+        <DropdownMenuGroup>
+          {savedThemes.map((savedTheme, idx) =>
+            !savedTheme.default ? (
+              <></>
+            ) : (
+              <DropdownMenuItem
+                key={savedTheme.name}
+                onClick={() => selectTheme(idx)}
+                className={`justify-between ${
+                  themeConfig.name === savedTheme.name &&
+                  "bg-black/10 dark:bg-white/10"
+                }`}
+              >
+                <div className="truncate">{savedTheme.name}</div>
+                <div className="flex shadow-md">
+                  {getColorPalette(
+                    savedTheme,
+                    theme === "dark" ? "dark" : "light"
+                  ).map((color, i) => (
+                    <div
+                      className={`size-5 ${i === 0 && "rounded-l-md"} ${
+                        i === savedThemes.length && "rounded-r-md"
+                      }`}
+                      style={{ backgroundColor: hslToHex(color!) }}
+                    ></div>
+                  ))}
+                </div>
+              </DropdownMenuItem>
+            )
+          )}
+        </DropdownMenuGroup>
+        {customThemes.length > 0 && (
+          <>
+            <DropdownMenuLabel>Custom Themes</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              {savedThemes.map((savedTheme, idx) =>
+                savedTheme.default ? (
+                  <></>
+                ) : (
+                  <DropdownMenuItem
+                    key={savedTheme.name}
+                    onClick={() => selectTheme(idx)}
+                    className={`justify-between ${
+                      themeConfig.name === savedTheme.name &&
+                      "bg-black/10 dark:bg-white/10"
                     }`}
-                    style={{ backgroundColor: hslToHex(color!) }}
-                  ></div>
-                ))}
-              </div>
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
+                  >
+                    <div className="flex justify-between w-full">
+                      <div className="truncate w-full">{savedTheme.name}</div>
+                      <div className="flex shadow-md w-fit">
+                        {getColorPalette(
+                          savedTheme,
+                          theme === "dark" ? "dark" : "light"
+                        ).map((color, i) => (
+                          <div
+                            className={`size-5 ${i === 0 && "rounded-l-md"} ${
+                              i === 4 && "rounded-r-md"
+                            }`}
+                            style={{ backgroundColor: hslToHex(color!) }}
+                          ></div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* <div className="flex w-fit items-center justify-end ml-3 pl-3 gap-2 border-l">
+                      <Trash2
+                        className="size-[18px] cursor-pointer"
+                        onClick={() => deleteTheme(idx)}
+                      />
+                    </div> */}
+                  </DropdownMenuItem>
+                )
+              )}
+            </DropdownMenuGroup>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-  return (
-    <Select onValueChange={changeTheme}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a theme" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Themes</SelectLabel>
-          {savedThemes.map((savedTheme) => (
-            <SelectItem key={savedTheme.name} value={savedTheme.name}>
-              <div className="">{savedTheme.name}</div>
-              <span className="rounded-md flex">
-                {getColorPalette(savedTheme, "light").map((colorVal, i) => (
-                  <span
-                    key={i}
-                    style={{ backgroundColor: hslToHex(colorVal!) }}
-                    className="size-4 inline-block"
-                  ></span>
-                ))}
-              </span>
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
   );
 }

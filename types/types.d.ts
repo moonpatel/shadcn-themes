@@ -60,6 +60,7 @@ interface ThemeConfig {
 
 interface SavedThemeConfig extends ThemeConfig {
   name: string;
+  default: boolean
 }
 
 interface ColorPair {

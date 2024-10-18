@@ -3,20 +3,21 @@ import React, { useEffect } from "react";
 import { ScrollArea } from "@/components/custom-ui/scroll-area";
 import { hexToHSL, hslToHex } from "@/lib/color";
 import ColorSwatch from "./custom-ui/color-swatch";
-import useThemeConfig from "@/hooks/use-theme-config";
 import { useTheme } from "next-themes";
 import ControlPanel from "./control-panel";
 import { Popover, PopoverContent } from "./custom-ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Button } from "./custom-ui/button";
-import { Cog, SlidersVertical } from "lucide-react";
+import { SlidersVertical } from "lucide-react";
 import { getColorPairs, getSingleColors } from "@/lib/utils";
 import GenerateCodeButton from "./generate-code-button";
 import SelectTheme from "./select-theme";
-import SaveThemeButton from "./save-theme";
+import { toast } from "react-hot-toast";
+import { useThemeConfiguration } from "@/app/context/theme-config-provider";
 
 export function ConfigurationTool() {
-  const { themeConfig, setThemeConfig, reset } = useThemeConfig();
+  const { themeConfig, setThemeConfig, reset, isDirty, saveTheme } =
+    useThemeConfiguration();
   const { theme } = useTheme();
   const colorPairs = getColorPairs(
     theme === "dark" ? themeConfig.dark : themeConfig.light
@@ -150,9 +151,31 @@ export function ConfigurationTool() {
                 </div>
               </div>
             </div>
-            <div className="flex space-x-2 justify-end mt-10">
+            <div className="flex space-x-3 justify-end mt-10">
               <SelectTheme />
-              <SaveThemeButton />
+              <Button variant={"outline"} onClick={reset}>
+                Reset
+              </Button>
+              <Button
+                variant="save"
+                className="relative"
+                onClick={() => {
+                  themeConfig.default &&
+                    toast("Cannot modify default theme", {
+                      style: {
+                        backgroundColor: "rgb(230,96,96)",
+                        color: "white",
+                      },
+                    });
+                  saveTheme();
+                }}
+              >
+                Save Theme
+                {isDirty && (
+                  <div className="absolute size-[10px] bg-orange-400 shadow-md -top-[2px] -right-[3px] rounded-full"></div>
+                )}
+              </Button>
+              {/* <SaveThemeButton /> */}
               <GenerateCodeButton />
             </div>
           </div>
